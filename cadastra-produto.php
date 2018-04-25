@@ -33,7 +33,7 @@
             </div>
             <div class="container">
             
-                <form method="post" action="processa-produto.php">
+                <form method="post" action="processa-produto.php" name="form1">
                     <div class="form-input">
                         <input type="text" name="nome" maxlength="50" required autofocus placeholder="Insira o nome do produto:">
                     </div>

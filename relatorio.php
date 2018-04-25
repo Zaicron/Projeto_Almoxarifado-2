@@ -1,16 +1,12 @@
 <?php
-
+//including the database connection file
 include_once("conexao.php");
-
-$filtro = isset($_GET['filtro'])?$_GET['filtro']:"";
-
-$sql = "select * from produtos where nome like '%$filtro%' order by nome";
-$consulta = mysqli_query($conexao, $sql);
-$registros = mysqli_num_rows($consulta);
-
+ 
+//fetching data in descending order (lastest entry first)
+//$result = mysql_query("SELECT * FROM users ORDER BY id DESC"); // mysql_query is deprecated
+$resultado = mysqli_query($conexao, "SELECT * FROM produtos ORDER BY nome"); // using mysqli_query instead
 ?>
 
-<!DOCTYPE html>
 <html>
     <head>
         <title>Almoxarifado - Relatórios</title>
@@ -40,38 +36,28 @@ $registros = mysqli_num_rows($consulta);
         </aside>
         
         <div class="corpo-principal">
-            
-            <form method="get" action="">
-                <div class="form-input">
-                    <input type="text" name="filtro" maxlength="50" required autofocus placeholder="Insira o nome do produto:"> <input type="submit" name="submit" value="Buscar" class="btn-alterar"><br>
-                </div>
-            </form>
-                
-            <?php
-            
-            print "Resultado da pesquisa com a palavra: $filtro <br><br>";
-                
-            print "$registros registros encontrados. <br><br>";
-            
-            while($exibirRegistros = mysqli_fetch_array($consulta)){
-                
-                $codigo = $exibirRegistros[0];
-                $nome = $exibirRegistros[1];
-                $quantidade = $exibirRegistros[2];
-                
-                print "<article>";
-                
-                print "Código: $codigo    ";
-                print "Produto: $nome    ";
-                print "Quantidade: $quantidade    ";
-                
-                print "</article>";
-                
-            }
-            
-            mysqli_close($conexao);
-            
-            ?>
+                      
+                 <table width='80%' border=0>
+
+                <tr bgcolor='#CCCCCC'>
+                    <td>Nome</td>
+                    <td>Quantidade</td>
+                    <td>Atualizar</td>
+                </tr>
+                     
+                <?php 
+                     
+                while($resposta = mysqli_fetch_array($resultado)) { 		
+                    echo "<tr>";
+                    echo "<td>".$resposta['nome']."</td>";
+                    echo "<td>".$resposta['quantidade']."</td>";
+                    
+                    echo "<td><a href=\"editar.php?codigo=$resposta[codigo]\">Editar</a> | <a href=\"deletar.php?codigo=$resposta[codigo]\" onClick=\"return confirm('Você tem certeza que deseja deletar?')\">Deletar</a></td>";		
+                }
+                     
+                ?>
+                     
+                </table>
             
         </div>
         
